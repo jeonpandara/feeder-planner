@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign in · Feeder Planner</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--navy:#06263d;--deep:#0b3f63;--sea:#0d5b8c;--foam:#e2eef6;--rust:#c4452d;--ink:#14212b;--muted:#5a6a77;--line:#d3dbe2}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:16px;font:15px "IBM Plex Sans",system-ui,sans-serif;color:var(--ink);
+background:linear-gradient(180deg,#0a3350 0%,#0b3f63 55%,#0d5b8c 100%);position:relative;overflow:hidden}
+.waves{position:fixed;left:0;right:0;bottom:0;height:34vh;pointer-events:none}
+.card{position:relative;z-index:1;width:min(420px,100%);background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.card header{background:#fff;padding:18px 22px 10px;border-bottom:4px solid var(--rust)}
+.card header{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.card header img{max-width:48%;height:40px;object-fit:contain;object-position:left}
+.containers{display:flex;height:10px}.containers i{flex:1}
+.containers i:nth-child(4n+1){background:#c4452d}.containers i:nth-child(4n+2){background:#0d5b8c}.containers i:nth-child(4n+3){background:#e0a526}.containers i:nth-child(4n){background:#2f7d5b}
+form{padding:22px;display:flex;flex-direction:column;gap:14px}
+h1{margin:0;font:700 30px/1 "Barlow Condensed",sans-serif;letter-spacing:.01em;color:var(--deep);text-transform:uppercase}
+p{margin:0;color:var(--muted);font-size:13px}
+label{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+input{font:inherit;font-size:15px;padding:10px 12px;border:1px solid var(--line);border-radius:6px;color:var(--ink);text-transform:none;letter-spacing:0;font-weight:400}
+input:focus{outline:2px solid var(--sea);outline-offset:1px}
+button{font:600 15px "IBM Plex Sans",sans-serif;padding:11px;border:0;border-radius:6px;background:var(--deep);color:#fff;cursor:pointer}
+button:hover{background:var(--sea)}button:disabled{opacity:.6}
+.err{color:#b0281f;font-size:13px;min-height:18px}
+</style></head><body>
+<svg class="waves" viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true"><path d="M0 90 C150 40 300 140 450 90 S750 40 900 90 1050 140 1200 90 V200 H0Z" fill="#06263d" opacity=".35"/><path d="M0 130 C150 80 300 180 450 130 S750 80 900 130 1050 180 1200 130 V200 H0Z" fill="#06263d" opacity=".55"/></svg>
+<main class="card">
+<header><img src="/assets/logo-hal.jpg" alt="Heung-A Line"><img src="/assets/logo-sinokor.png" alt="Sinokor"></header>
+<div class="containers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<form id="f">
+<div><h1>Feeder Connection Planner</h1><p>Heung-A Line Jakarta · sign in to continue</p></div>
+<label>Username<input id="u" autocomplete="username" required autofocus></label>
+<label>Password<input id="p" type="password" autocomplete="current-password" required></label>
+<div class="err" id="e" role="alert"></div>
+<button id="b">Sign in</button>
+</form></main>
+<script>
+document.getElementById("f").addEventListener("submit",async e=>{
+  e.preventDefault();const b=document.getElementById("b"),er=document.getElementById("e");b.disabled=true;er.textContent="";
+  try{const r=await fetch("/api/login",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({username:u.value,password:p.value})});
+    if(r.ok)location.reload();else er.textContent=(await r.json()).error||"Sign in failed."}
+  catch(_){er.textContent="Cannot reach the server."}b.disabled=false});
+</script></body></html>
